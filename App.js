@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {cognito_init} from './cognito';
+import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import { cognitoRegisterUser, cognitoGetCurrentUser } from './cognito';
 
-export default class App extends React.Component {
+export default class XustosApp extends React.Component {
   render() {
     return (
       <View style={styles.container}>
         <Text>Yeah! First App!</Text>
-        <Text>Changes you make will automatically reload.</Text>
+        <Text>Changes you make will automatically reload or not.</Text>
         <Text>Shake your phone to open the developer menu.</Text>
       </View>
     );
@@ -22,3 +22,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+AppRegistry.registerComponent('XustosApp', () => XustosApp);

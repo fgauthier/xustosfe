@@ -1,11 +1,12 @@
 import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 
-export const cognito_init = (email, msisdn) => {
+const poolData = { UserPoolId : 'us-east-1_2R3gQaodp',
+    ClientId : '2skfn5ug4t2fjpg1b7lr9r9dn0'
+};
+
+export const cognitoRegisterUser = (email, msisdn) => {
   AWSCognito.config.region = 'us-east-1'; //This is required to derive the endpoint
 
-   const poolData = { UserPoolId : 'us-east-1_2R3gQaodp',
-       ClientId : '2skfn5ug4t2fjpg1b7lr9r9dn0'
-   };
    const userPool =
     new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
 
@@ -14,7 +15,7 @@ export const cognito_init = (email, msisdn) => {
    const dataEmail = {
        Name : 'email',
        Value : email
-   };       Value : msisdn
+   };
 
    const dataPhoneNumber = {
      Value : msisdn,
@@ -30,7 +31,7 @@ export const cognito_init = (email, msisdn) => {
    attributeList.push(attributePhoneNumber);
 
    userPool.signUp('username', 'password', attributeList, null,
-    function(err, result){
+    (err, result) => {
        if (err) {
            alert(err);
            return;
@@ -38,4 +39,20 @@ export const cognito_init = (email, msisdn) => {
        cognitoUser = result.user;
        console.log('user name is ' + cognitoUser.getUsername());
    });
-}
+};
+
+export const cognitoGetCurrentUser = () => {
+  const userPool =
+    new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
+  const cognitoUser = userPool.getCurrentUser();
+
+  if (cognitoUser != null) {
+    cognitoUser.getSession((err, session) => {
+        if (err) {
+            alert(err);
+            return;
+        }
+        console.log('session validity: ' + session.isValid());
+    });
+  }
+};
