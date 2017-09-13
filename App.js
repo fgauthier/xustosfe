@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
-import { cognitoRegisterUser, cognitoGetCurrentUser } from './cognito';
+import { cognitoSignupUser, cognitoGetCurrentUser } from './cognito';
 
 export default class XustosApp extends React.Component {
   render() {
