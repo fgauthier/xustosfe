@@ -1,34 +1,44 @@
+global.Buffer = global.Buffer || require('buffer').Buffer; // Required for aws sigv4 signing
+
 import React from 'react';
-import {
-  StyleSheet, Text, View, AppRegistry
-}
-from 'react-native';
-import {
-  login
-}
-from './src/auth/cognitoauth';
+import { DrawerNavigator } from 'react-navigation';
 
-export default class XustosApp extends React.Component {
-  render() {
-    return ( < View style = {
-        styles.container
-      } >
-      < Text > Yeah!First App! <
-      /Text> < Text > Changes you make will automatically reload or not
-      . <
-      /Text> < Text > Shake your phone to open the developer menu. < /
-      Text > < /View>
-    );
-  }
-}
+import { WithAuth } from './lib/Categories/Auth/Components';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+import First from './src/Screens/First';
+import Splash from './src/Screens/Splash';
+import Home from './src/Screens/Home';
+import SignOut from './src/Components/SignOut';
+import ForgotPassword from './src/Components/ForgotPassword';
+
+const App = DrawerNavigator({
+  Home: {
+    screen: props => <Home rootNavigator={props.navigation} {...props.screenProps } />,
   },
-});
+  ForgotPassword: {
+    screen: (props) => {
+      return <ForgotPassword {...props.screenProps} onCancel={() => props.navigation.navigate('Home')} onSuccess={() => props.navigation.navigate('Home')} />
+    }, navigationOptions: { drawerLabel: 'Change password' }
+  },
+  SignOut: {
+    screen: (props) => {
+      return <SignOut rootNavigator={props.navigation} {...props} />
+    }, navigationOptions: { drawerLabel: 'Sign Out' }
+  },
+  Splash: {
+    screen: props => <Splash navigation={props.navigation} { ...props.screenProps } />,
+    navigationOptions: {
+      drawerLabel: ' ',
+    },
+  },
+  FirstScreen: {
+    screen: props => <First rootNavigator={props.navigation} screenProps={{ ...props.screenProps }} />,
+    navigationOptions: {
+      drawerLabel: ' ',
+    },
+  },
+}, { initialRouteName: 'Splash' });
 
-AppRegistry.registerComponent('XustosApp', () => XustosApp);
+const AppContainer = props => <App screenProps={{ ...props }} />;
+
+export default WithAuth(AppContainer);
