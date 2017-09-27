@@ -2,3 +2,5 @@ node_modules/
 .expo/
 npm-debug.*
 /bin/
+android/.gradle
+aws-exports.js
